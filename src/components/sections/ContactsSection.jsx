@@ -6,6 +6,21 @@ export default function ContactsSection() {
   const [contacts, setContacts] = useState(null);
 
   useEffect(() => {
+    // Загружаем скрипт Яндекс.Карт
+    const existingScript = document.querySelector('script[src*="api-maps.yandex.ru"]');
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement('script');
+    script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aedb06e2411d6fb1faaf1aedff5216b9b0e050d37c54eec41bf449811b508eb8c&amp;width=100%25&amp;height=100%25&amp;lang=ru_RU&amp;scroll=true';
+    script.async = true;
+    document.getElementById('yandex-map-home')?.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     api.getContacts().then(setContacts).catch(console.error);
   }, []);
 
@@ -15,18 +30,21 @@ export default function ContactsSection() {
       sub: 'Ответим в течение 15 минут',
       href: contacts.whatsapp.startsWith('http') ? contacts.whatsapp : `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}`,
       icon: MessageCircle,
+      iconClass: 'text-whatsapp',
     },
     contacts.telegram && {
       label: 'Telegram',
       sub: contacts.telegram,
       href: contacts.telegram.startsWith('http') ? contacts.telegram : `https://t.me/${contacts.telegram.replace('@', '')}`,
       icon: MessageCircle,
+      iconClass: 'text-telegram',
     },
     contacts.phone && {
       label: contacts.phone,
       sub: 'Позвонить менеджеру',
       href: `tel:${contacts.phone.replace(/\s/g, '')}`,
       icon: Phone,
+      iconClass: 'text-accent',
     },
   ].filter(Boolean) : [];
 
@@ -44,8 +62,8 @@ export default function ContactsSection() {
                 return (
                   <a key={m.label} href={m.href} target={m.href.startsWith('http') ? '_blank' : undefined} rel={m.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className="flex items-center gap-4 p-4 rounded-xl border border-border bg-bg-secondary hover:border-accent transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-bg-tertiary border border-border flex items-center justify-center flex-shrink-0">
-                      <Icon size={18} className="text-accent" />
+                    <div className="w-10 h-10 rounded-lg border border-border flex items-center justify-center flex-shrink-0">
+                      <Icon size={18} className={m.iconClass} />
                     </div>
                     <div>
                       <p className="text-body font-semibold text-ink">{m.label}</p>
@@ -57,17 +75,8 @@ export default function ContactsSection() {
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            <div className="rounded-xl border border-border bg-bg-secondary aspect-[4/3] flex items-center justify-center overflow-hidden relative">
-              <div className="dot-grid absolute inset-0 opacity-80" />
-              <div className="relative flex flex-col items-center gap-3 text-center p-8">
-                <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center">
-                  <MapPin size={20} className="text-black" />
-                </div>
-                <div>
-                  <p className="text-body font-semibold text-ink">{contacts?.city ?? 'Москва и Московская область'}</p>
-                  {contacts?.address && <p className="text-body-sm text-ink-muted mt-1">{contacts.address}</p>}
-                </div>
-              </div>
+            <div className="rounded-xl border border-border bg-bg-secondary aspect-[4/3] overflow-hidden">
+              <div id="yandex-map-home" style={{width: '100%', height: '100%'}}></div>
             </div>
             {contacts && (contacts.hoursWeekday || contacts.hoursSaturday || contacts.hoursSunday) && (
               <div className="flex items-start gap-3 p-5 rounded-xl border border-border bg-bg-secondary">

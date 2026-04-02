@@ -9,6 +9,7 @@ async function get(path) {
 export const api = {
   getCases: () => get('/api/cases'),
   getCase: (slug) => get(`/api/cases/${slug}`),
+  getHero: () => get('/api/hero'),
   getTestimonials: () => get('/api/testimonials'),
   getPackages: () => get('/api/packages'),
   getFaqs: () => get('/api/faqs'),

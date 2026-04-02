@@ -31,7 +31,7 @@ export default function PackagesSection() {
               }`}>
                 <div className="mb-5">
                   <span className={`inline-flex text-caption font-semibold px-2.5 py-1 rounded border ${
-                    pkg.featured ? 'text-white/60 bg-white/10 border-white/20' : 'text-ink-muted bg-bg-secondary border-border'
+                    pkg.featured ? 'text-bg bg-accent border-accent/50' : 'text-ink-muted bg-bg-secondary border-border'
                   }`}>{pkg.sub}</span>
                 </div>
                 <h3 className={`text-heading font-bold mb-3 ${pkg.featured ? 'text-white' : 'text-ink'}`}>{pkg.name}</h3>
@@ -40,7 +40,7 @@ export default function PackagesSection() {
                   <div className="flex gap-2 mb-5 flex-wrap">
                     {pkg.levels.map((level) => (
                       <span key={level} className={`text-caption px-2.5 py-1 rounded-pill border font-medium ${
-                        pkg.featured ? 'border-white/20 text-white/70' : 'border-border text-ink-muted'
+                        pkg.featured ? 'border-accent/30 text-accent bg-accent/10' : 'border-border text-ink-muted'
                       }`}>{level}</span>
                     ))}
                   </div>
@@ -48,13 +48,13 @@ export default function PackagesSection() {
                 <ul className="flex flex-col gap-2 mb-8 flex-1">
                   {pkg.includes.map((item) => (
                     <li key={item} className="flex items-start gap-2.5">
-                      <Check size={14} className={`flex-shrink-0 mt-0.5 ${pkg.featured ? 'text-white/50' : 'text-accent'}`} />
+                      <Check size={14} className={`flex-shrink-0 mt-0.5 ${pkg.featured ? 'text-accent' : 'text-accent'}`} />
                       <span className={`text-body-sm ${pkg.featured ? 'text-white/70' : 'text-ink-muted'}`}>{item}</span>
                     </li>
                   ))}
                 </ul>
                 <Link to="/pakety" className={`inline-flex items-center justify-center gap-2 text-body-sm font-semibold px-5 py-3 rounded-lg transition-colors ${
-                  pkg.featured ? 'bg-white text-featured hover:bg-white/90' : 'bg-accent text-white hover:bg-accent-hover'
+                  pkg.featured ? 'bg-white text-featured hover:bg-white/90' : 'bg-accent text-bg hover:bg-accent-hover'
                 }`}>
                   Получить смету <ArrowRight size={15} />
                 </Link>

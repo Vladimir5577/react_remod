@@ -1,13 +1,29 @@
 import { Link } from 'react-router-dom';
 import { Phone, MessageCircle, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { useEffect } from 'react';
 
 const messengers = [
-  { label: 'WhatsApp', sub: 'Ответим в течение 15 минут', href: 'https://wa.me/79991234567', icon: MessageCircle, bg: 'bg-green-50 border-green-200 hover:bg-green-100', iconColor: 'text-green-600' },
-  { label: 'Telegram', sub: '@remodpro', href: 'https://t.me/remodpro', icon: MessageCircle, bg: 'bg-sky-50 border-sky-200 hover:bg-sky-100', iconColor: 'text-sky-500' },
+  { label: 'WhatsApp', sub: 'Ответим в течение 15 минут', href: 'https://wa.me/79991234567', icon: MessageCircle, bg: 'bg-whatsapp-bg border-whatsapp/30 hover:bg-whatsapp hover:border-whatsapp', iconColor: 'text-whatsapp' },
+  { label: 'Telegram', sub: '@remodpro', href: 'https://t.me/remodpro', icon: MessageCircle, bg: 'bg-telegram-bg border-telegram/30 hover:bg-telegram hover:border-telegram', iconColor: 'text-telegram' },
   { label: '+7 (999) 123-45-67', sub: 'Позвонить менеджеру', href: 'tel:+79991234567', icon: Phone, bg: 'bg-bg-secondary border-border hover:bg-accent-light', iconColor: 'text-ink' },
 ];
 
 export default function KontaktyPage() {
+  useEffect(() => {
+    // Удаляем предыдущий скрипт если есть
+    const existingScript = document.querySelector('script[src*="api-maps.yandex.ru"]');
+    if (existingScript) existingScript.remove();
+
+    const script = document.createElement('script');
+    script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aedb06e2411d6fb1faaf1aedff5216b9b0e050d37c54eec41bf449811b508eb8c&amp;width=100%25&amp;height=100%25&amp;lang=ru_RU&amp;scroll=true';
+    script.async = true;
+    document.getElementById('yandex-map-container')?.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
       <div className="max-w-container mx-auto container-px">
@@ -22,8 +38,8 @@ export default function KontaktyPage() {
             <p className="text-label font-semibold text-ink-muted uppercase tracking-widest mb-5">Мессенджеры и телефон</p>
             <div className="flex flex-col gap-3 mb-10">
               {messengers.map((m) => { const Icon = m.icon; return (
-                <a key={m.label} href={m.href} target={m.href.startsWith('http') ? '_blank' : undefined} rel={m.href.startsWith('http') ? 'noopener noreferrer' : undefined} className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${m.bg}`}>
-                  <div className="w-10 h-10 rounded-lg bg-white border border-border/60 flex items-center justify-center flex-shrink-0"><Icon size={18} className={m.iconColor} /></div>
+                <a key={m.label} href={m.href} target={m.href.startsWith('http') ? '_blank' : undefined} rel={m.href.startsWith('http') ? 'noopener noreferrer' : undefined} className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${m.bg}`}>
+                  <div className={`w-10 h-10 rounded-lg border flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${m.bg.includes('whatsapp') ? 'bg-white border-whatsapp/30 group-hover:bg-whatsapp' : m.bg.includes('telegram') ? 'bg-white border-telegram/30 group-hover:bg-telegram' : 'bg-bg-secondary border-border'}`}><Icon size={18} className={m.iconColor} /></div>
                   <div><p className="text-body font-semibold text-ink">{m.label}</p><p className="text-body-sm text-ink-muted">{m.sub}</p></div>
                 </a>
               ); })}
@@ -38,15 +54,8 @@ export default function KontaktyPage() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="rounded-xl border border-border bg-bg-secondary aspect-[4/3] flex items-center justify-center overflow-hidden relative">
-              <div className="dot-grid absolute inset-0 opacity-80" />
-              <div className="relative flex flex-col items-center gap-3 text-center p-8">
-                <div className="w-12 h-12 rounded-full bg-ink flex items-center justify-center"><MapPin size={20} className="text-bg" /></div>
-                <div>
-                  <p className="text-body font-semibold text-ink">Москва и Московская область</p>
-                  <p className="text-body-sm text-ink-muted mt-1">Офис: ул. Примерная, 1 — по договорённости</p>
-                </div>
-              </div>
+            <div className="rounded-xl border border-border bg-bg-secondary aspect-[4/3] overflow-hidden">
+              <div id="yandex-map-container" style={{width: '100%', height: '100%'}}></div>
             </div>
             <div className="flex items-start gap-3 p-5 rounded-xl border border-border bg-bg-secondary">
               <div className="w-9 h-9 rounded-md bg-bg border border-border flex items-center justify-center flex-shrink-0 mt-0.5"><Clock size={16} className="text-ink-muted" /></div>

@@ -30,6 +30,14 @@ export default {
           DEFAULT: 'rgb(var(--color-featured) / <alpha-value>)',
           border: 'rgb(var(--color-featured-border) / <alpha-value>)',
         },
+        whatsapp: {
+          DEFAULT: 'rgb(var(--color-whatsapp) / <alpha-value>)',
+          bg: 'rgb(var(--color-whatsapp-bg) / <alpha-value>)',
+        },
+        telegram: {
+          DEFAULT: 'rgb(var(--color-telegram) / <alpha-value>)',
+          bg: 'rgb(var(--color-telegram-bg) / <alpha-value>)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-onest)', 'system-ui', 'sans-serif'],

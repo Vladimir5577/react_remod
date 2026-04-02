@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext.jsx';
 import Logo from '../ui/Logo.jsx';
@@ -15,6 +15,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const location = useLocation();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 32);
@@ -35,15 +36,23 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1" aria-label="Основная навигация">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="px-4 py-2 text-body-sm font-medium text-ink-muted hover:text-ink rounded-md hover:bg-ink/5 transition-colors duration-150"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`relative px-4 py-2 text-body-sm font-medium transition-colors duration-150 ${
+                    isActive ? 'text-ink' : 'text-ink-muted hover:text-ink'
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-accent header-tab-indicator rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="hidden md:flex items-center gap-3">

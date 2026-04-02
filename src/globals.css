@@ -19,6 +19,12 @@
   --color-accent-light: 23 31 0;
   --color-featured: 13 25 69;
   --color-featured-border: 26 48 112;
+  /* WhatsApp brand colors - dark theme (bright icon on dark bg) */
+  --color-whatsapp: 100 255 150;
+  --color-whatsapp-bg: 7 94 84;
+  /* Telegram brand colors - dark theme (bright icon on dark bg) */
+  --color-telegram: 100 200 255;
+  --color-telegram-bg: 13 67 100;
 }
 
 [data-theme="light"] {
@@ -33,11 +39,34 @@
   --color-accent-light: 234 255 160;
   --color-featured: 91 63 255;
   --color-featured-border: 110 85 255;
+  /* WhatsApp brand colors - light theme (dark icon on light bg) */
+  --color-whatsapp: 0 130 60;
+  --color-whatsapp-bg: 235 252 240;
+  /* Telegram brand colors - light theme (dark icon on light bg) */
+  --color-telegram: 0 115 175;
+  --color-telegram-bg: 235 248 255;
 }
 
 [data-theme="light"] .text-accent {
   color: #5A7A00;
 }
+
+[data-theme="light"] .text-bg {
+  color: #0a0a0a;
+}
+
+/* Индикатор активного таба в хедере - тёмный в светлой теме */
+[data-theme="light"] .header-tab-indicator {
+  background-color: #100c08;
+}
+
+/* WhatsApp colors */
+.text-whatsapp { color: rgb(var(--color-whatsapp)); }
+.bg-whatsapp-bg { background-color: rgb(var(--color-whatsapp-bg)); }
+
+/* Telegram colors */
+.text-telegram { color: rgb(var(--color-telegram)); }
+.bg-telegram-bg { background-color: rgb(var(--color-telegram-bg)); }
 
 @layer base {
   * { box-sizing: border-box; }

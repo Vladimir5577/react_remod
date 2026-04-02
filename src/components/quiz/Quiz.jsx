@@ -90,7 +90,7 @@ export function Quiz() {
         </div>
       </div>
 
-      <div className="relative min-h-[440px] sm:min-h-[380px]">
+      <div className={isLastStep ? '' : 'relative min-h-[440px] sm:min-h-[380px]'}>
         <AnimatePresence mode="wait">
           {!isLastStep ? (
             <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0">
@@ -115,7 +115,7 @@ export function Quiz() {
               </div>
             </motion.div>
           ) : (
-            <motion.div key="final" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0">
+            <motion.div key="final" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>
               <div className="mb-7 rounded-xl bg-bg-secondary border border-border p-6">
                 <p className="text-label font-semibold text-ink-muted uppercase tracking-widest mb-2">Предварительная оценка</p>
                 <div className="text-display-md font-extrabold text-ink tracking-tight">{estimate?.min} – {estimate?.max} ₽</div>
@@ -146,12 +146,12 @@ export function Quiz() {
                     ))}
                   </div>
                 </div>
-                <p className="text-caption text-ink-faint">Нажимая «Получить оценку», вы соглашаетесь с <a href="/politika" className="underline hover:text-ink-muted transition-colors">политикой обработки персональных данных</a>.</p>
                 <Button type="submit" size="lg" className="w-full" disabled={status === 'loading' || data.phone.length < 10}>
                   {status === 'loading' ? 'Отправляем...' : 'Получить оценку'}
                   {status !== 'loading' && <ArrowRight className="ml-2 h-4 w-4" />}
                 </Button>
                 {status === 'error' && <p className="text-center text-body-sm text-red-500">Что-то пошло не так. Позвоните нам напрямую.</p>}
+                <p className="text-caption text-ink-faint text-center">Нажимая «Получить оценку», вы соглашаетесь с <a href="/politika" className="underline hover:text-ink-muted transition-colors">политикой обработки персональных данных</a>.</p>
               </form>
             </motion.div>
           )}

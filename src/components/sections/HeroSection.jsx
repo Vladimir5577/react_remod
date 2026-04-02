@@ -1,20 +1,35 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, BadgeCheck, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { api } from '../../lib/api.js';
+
+const ease = [0.16, 1, 0.3, 1];
+const fadeUp = (delay = 0) => ({ initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, delay, ease } });
+const fadeRight = (delay = 0) => ({ initial: { opacity: 0, x: 40 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.8, delay, ease } });
 const utps = [
   { icon: Clock, label: '90 дней', desc: 'Фиксированный срок. Сдаём в дату из договора — или согласуем перенос заранее.' },
   { icon: BadgeCheck, label: 'Цена в договоре', desc: 'Итоговая стоимость фиксируется до начала. Никаких «внезапных доплат».' },
   { icon: Wallet, label: 'Рассрочка', desc: 'Разбиваем платёж на части. Уточняем условия на первой встрече.' },
 ];
 
-const ease = [0.16, 1, 0.3, 1];
-const fadeUp = (delay = 0) => ({ initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, delay, ease } });
-const fadeRight = (delay = 0) => ({ initial: { opacity: 0, x: 40 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.8, delay, ease } });
-
-const heroMain = '/uploads/cases/after/after-01.jpg';
-const heroBefore = '/uploads/cases/before/before-01.jpg';
-
 export default function HeroSection() {
+  const [heroImages, setHeroImages] = useState({
+    imgAfter: '/uploads/cases/after/after-01.jpg',
+    imgBefore: '/uploads/cases/before/before-01.jpg',
+  });
+
+  useEffect(() => {
+    api.getHero()
+      .then((data) => {
+        if (!data) return;
+        setHeroImages((prev) => ({
+          imgAfter: data.imgAfter || prev.imgAfter,
+          imgBefore: data.imgBefore || prev.imgBefore,
+        }));
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center pt-16 overflow-hidden bg-bg">
@@ -59,13 +74,15 @@ export default function HeroSection() {
 
           <div className="relative hidden lg:block">
             <motion.div {...fadeRight(0.2)} className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-elevated">
-              <img src={heroMain} alt="Современный интерьер после ремонта" className="w-full h-full object-cover" />
+              {heroImages.imgAfter ? (
+                <img src={heroImages.imgAfter} alt="Современный интерьер после ремонта" className="w-full h-full object-cover" />
+              ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
                 <motion.div
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.7, ease }}
-                  className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-border"
+                  className="inline-flex items-center gap-2 bg-bg-tertiary/90 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-border"
                 >
                   <span className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
                   <span className="text-body-sm font-semibold text-ink">Белый · Комфорт · 84 дня</span>
@@ -78,7 +95,9 @@ export default function HeroSection() {
               className="absolute -left-10 top-12 w-36 rounded-xl overflow-hidden border border-border shadow-card-hover bg-bg"
             >
               <div className="aspect-square overflow-hidden">
-                <img src={heroBefore} alt="До ремонта" className="w-full h-full object-cover" />
+                {heroImages.imgBefore ? (
+                  <img src={heroImages.imgBefore} alt="До ремонта" className="w-full h-full object-cover" />
+                ) : null}
               </div>
               <div className="px-3 py-2">
                 <p className="text-caption font-semibold text-ink-muted">До</p>

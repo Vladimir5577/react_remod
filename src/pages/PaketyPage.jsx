@@ -44,7 +44,7 @@ export default function PaketyPage() {
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
                     {pkg.featured && (
-                      <span className="absolute top-3 left-3 bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-accent text-bg text-xs font-semibold px-3 py-1 rounded-full">
                         Популярный
                       </span>
                     )}
@@ -73,8 +73,8 @@ export default function PaketyPage() {
                   to="/kontakty"
                   className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors ${
                     pkg.featured
-                      ? 'bg-accent text-white hover:bg-accent-hover'
-                      : 'bg-ink text-bg hover:bg-ink/90'
+                      ? 'bg-accent text-bg hover:bg-accent-hover'
+                      : 'bg-bg-tertiary text-ink hover:bg-bg-tertiary/80'
                   }`}
                 >
                   Выбрать пакет
