@@ -11,7 +11,7 @@ export default function CtaBannerSection() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left">
               <h2 className="text-display-md font-bold text-black mb-3 text-balance">Готовы обсудить вашу квартиру?</h2>
-              <p className="text-body text-black/60 max-w-[500px]">Расскажите о задаче — ответим в течение 30 минут в рабочее время. Точная оценка — после бесплатного замера.</p>
+              <p className="text-body text-black/80 max-w-[500px]">Расскажите о задаче — ответим в течение 30 минут в рабочее время. Точная оценка — после бесплатного замера.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Link to="/ocenka" className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-black text-accent text-body font-black rounded-pill hover:bg-black/80 transition-colors group">

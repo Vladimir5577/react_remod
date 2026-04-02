@@ -1,22 +1,41 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Phone, MessageCircle, MapPin, Clock } from 'lucide-react';
 import { api } from '../../lib/api.js';
 
 export default function ContactsSection() {
   const [contacts, setContacts] = useState(null);
+  const mapContainerRef = useRef(null);
+  const scriptRef = useRef(null);
 
   useEffect(() => {
     // Загружаем скрипт Яндекс.Карт
     const existingScript = document.querySelector('script[src*="api-maps.yandex.ru"]');
-    if (existingScript) existingScript.remove();
+    if (existingScript) {
+      existingScript.remove();
+    }
 
     const script = document.createElement('script');
     script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aedb06e2411d6fb1faaf1aedff5216b9b0e050d37c54eec41bf449811b508eb8c&amp;width=100%25&amp;height=100%25&amp;lang=ru_RU&amp;scroll=true';
     script.async = true;
-    document.getElementById('yandex-map-home')?.appendChild(script);
+    scriptRef.current = script;
+
+    const initMap = () => {
+      if (mapContainerRef.current) {
+        mapContainerRef.current.appendChild(script);
+      }
+    };
+
+    if (mapContainerRef.current) {
+      initMap();
+    } else {
+      // Ждём рендера контейнера
+      setTimeout(initMap, 100);
+    }
 
     return () => {
-      script.remove();
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.remove();
+      }
     };
   }, []);
 
@@ -76,7 +95,7 @@ export default function ContactsSection() {
           </div>
           <div className="flex flex-col gap-6">
             <div className="rounded-xl border border-border bg-bg-secondary aspect-[4/3] overflow-hidden">
-              <div id="yandex-map-home" style={{width: '100%', height: '100%'}}></div>
+              <div ref={mapContainerRef} id="yandex-map-home" style={{width: '100%', height: '100%'}}></div>
             </div>
             {contacts && (contacts.hoursWeekday || contacts.hoursSaturday || contacts.hoursSunday) && (
               <div className="flex items-start gap-3 p-5 rounded-xl border border-border bg-bg-secondary">

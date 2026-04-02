@@ -43,7 +43,7 @@ export default function KejsyPage() {
           {filters.map((f) => (
             <button key={f} onClick={() => setActiveFilter(f)}
               className={`px-4 py-2 rounded-pill border text-body-sm font-medium transition-colors ${
-                activeFilter === f ? 'bg-ink text-bg border-ink' : 'border-border text-ink-muted hover:border-border-strong hover:text-ink'
+                activeFilter === f ? 'bg-accent text-black border-accent' : 'border-border text-ink-muted hover:border-border-strong hover:text-ink'
               }`}>{f}</button>
           ))}
         </div>
@@ -92,7 +92,7 @@ export default function KejsyPage() {
         <div className="flex flex-col items-center text-center gap-4 p-10 rounded-2xl bg-bg-secondary border border-border">
           <h2 className="text-heading font-bold text-ink">Хотите так же?</h2>
           <p className="text-body text-ink-muted max-w-[400px]">Расскажите о своей квартире — оценим сроки и стоимость за 10 минут.</p>
-          <Link to="/ocenka" className="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-bg text-body-sm font-semibold rounded-pill hover:bg-accent-hover transition-colors group">
+          <Link to="/ocenka" className="inline-flex items-center gap-2 px-7 py-3.5 bg-accent text-black text-body-sm font-semibold rounded-pill hover:bg-accent-hover transition-colors group">
             Получить оценку <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>

@@ -47,7 +47,7 @@ export default function KontaktyPage() {
             <div className="p-6 rounded-xl bg-bg-secondary border border-border">
               <h3 className="text-body font-bold text-ink mb-2">Хотите быструю оценку?</h3>
               <p className="text-body-sm text-ink-muted mb-4">Пройдите короткий опрос — менеджер перезвонит с предварительной стоимостью.</p>
-              <Link to="/ocenka" className="inline-flex items-center gap-2 px-5 py-2.5 bg-ink text-bg text-body-sm font-semibold rounded-pill hover:bg-accent-hover transition-colors group">
+              <Link to="/ocenka" className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-black text-body-sm font-semibold rounded-pill hover:bg-accent-hover transition-colors group">
                 Получить оценку <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>

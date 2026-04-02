@@ -48,13 +48,13 @@ export default function PackagesSection() {
                 <ul className="flex flex-col gap-2 mb-8 flex-1">
                   {pkg.includes.map((item) => (
                     <li key={item} className="flex items-start gap-2.5">
-                      <Check size={14} className={`flex-shrink-0 mt-0.5 ${pkg.featured ? 'text-accent' : 'text-accent'}`} />
+                      <Check size={14} className="flex-shrink-0 mt-0.5 text-accent" />
                       <span className={`text-body-sm ${pkg.featured ? 'text-white/70' : 'text-ink-muted'}`}>{item}</span>
                     </li>
                   ))}
                 </ul>
                 <Link to="/pakety" className={`inline-flex items-center justify-center gap-2 text-body-sm font-semibold px-5 py-3 rounded-lg transition-colors ${
-                  pkg.featured ? 'bg-white text-featured hover:bg-white/90' : 'bg-accent text-bg hover:bg-accent-hover'
+                  pkg.featured ? 'bg-white text-black hover:bg-white/90' : 'bg-accent text-black hover:bg-accent-hover'
                 }`}>
                   Получить смету <ArrowRight size={15} />
                 </Link>

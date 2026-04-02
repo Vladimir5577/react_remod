@@ -16,7 +16,6 @@ export default function TimelineSection() {
     <section className="section-py bg-bg">
       <div className="max-w-container mx-auto container-px">
         <AnimateIn preset="fade-up" className="max-w-[680px] mb-14">
-          <p className="text-label font-semibold text-accent uppercase tracking-widest mb-3" />
           <h2 className="text-display-md font-bold text-ink mb-5 text-balance">90 дней от замера до переезда</h2>
           <p className="text-body-lg text-ink-muted">Клиент не прораб. Мы берём на себя всё — от замеров до клининга. Вы просто приезжаете в готовую квартиру.</p>
         </AnimateIn>

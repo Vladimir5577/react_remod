@@ -19,5 +19,8 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
+    }).then((res) => {
+      if (!res.ok) throw new Error(`API error ${res.status}: /api/leads`);
+      return res.json();
     }),
 };

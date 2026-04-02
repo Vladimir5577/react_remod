@@ -98,7 +98,7 @@ export default function CaseDetailPage() {
             <div className="mt-10 p-6 rounded-xl bg-bg-secondary border border-border">
               <h3 className="text-body font-bold text-ink mb-2">Хочу так же</h3>
               <p className="text-body-sm text-ink-muted mb-5">Расскажите о своей квартире — оценим стоимость и сроки.</p>
-              <Link to="/ocenka" className="inline-flex items-center gap-2 w-full justify-center py-3 bg-ink text-bg text-body-sm font-semibold rounded-lg hover:bg-accent-hover transition-colors group">
+              <Link to="/ocenka" className="inline-flex items-center gap-2 w-full justify-center py-3 bg-accent text-black text-body-sm font-semibold rounded-lg hover:bg-accent-hover transition-colors group">
                 Получить оценку <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>

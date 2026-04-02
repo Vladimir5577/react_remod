@@ -70,7 +70,7 @@ export default function PaketyPage() {
                 </ul>
 
                 <Link
-                  to="/kontakty"
+                  to="/ocenka"
                   className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors ${
                     pkg.featured
                       ? 'bg-accent text-bg hover:bg-accent-hover'
