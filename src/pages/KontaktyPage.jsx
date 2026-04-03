@@ -1,14 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Phone, MessageCircle, MapPin, Clock, ArrowRight } from 'lucide-react';
-import { useEffect } from 'react';
-
-const messengers = [
-  { label: 'WhatsApp', sub: 'Ответим в течение 15 минут', href: 'https://wa.me/79991234567', icon: MessageCircle, bg: 'bg-whatsapp-bg border-whatsapp/30 hover:bg-whatsapp hover:border-whatsapp', iconColor: 'text-whatsapp' },
-  { label: 'Telegram', sub: '@remodpro', href: 'https://t.me/remodpro', icon: MessageCircle, bg: 'bg-telegram-bg border-telegram/30 hover:bg-telegram hover:border-telegram', iconColor: 'text-telegram' },
-  { label: '+7 (999) 123-45-67', sub: 'Позвонить менеджеру', href: 'tel:+79991234567', icon: Phone, bg: 'bg-bg-secondary border-border hover:bg-accent-light', iconColor: 'text-ink' },
-];
+import { useEffect, useMemo, useState } from 'react';
+import { api } from '../lib/api.js';
 
 export default function KontaktyPage() {
+  const [contacts, setContacts] = useState(null);
+
   useEffect(() => {
     // Удаляем предыдущий скрипт если есть
     const existingScript = document.querySelector('script[src*="api-maps.yandex.ru"]');
@@ -23,6 +20,54 @@ export default function KontaktyPage() {
       script.remove();
     };
   }, []);
+
+  useEffect(() => {
+    api.getContacts().then(setContacts).catch(console.error);
+  }, []);
+
+  const messengers = useMemo(() => {
+    const whatsappHref = contacts?.whatsapp
+      ? contacts.whatsapp.startsWith('http')
+        ? contacts.whatsapp
+        : `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}`
+      : 'https://wa.me/79991234567';
+
+    const telegramHref = contacts?.telegram
+      ? contacts.telegram.startsWith('http')
+        ? contacts.telegram
+        : `https://t.me/${contacts.telegram.replace('@', '')}`
+      : 'https://t.me/remodpro';
+
+    const phoneLabel = contacts?.phone || '+7 (999) 123-45-67';
+    const phoneHref = `tel:${phoneLabel.replace(/\s/g, '')}`;
+
+    return [
+      {
+        label: 'WhatsApp',
+        sub: 'Ответим в течение 15 минут',
+        href: whatsappHref,
+        icon: MessageCircle,
+        bg: 'bg-whatsapp-bg border-whatsapp/30 hover:bg-whatsapp hover:border-whatsapp',
+        iconColor: 'text-whatsapp',
+      },
+      {
+        label: 'Telegram',
+        sub: contacts?.telegram || '@remodpro',
+        href: telegramHref,
+        icon: MessageCircle,
+        bg: 'bg-telegram-bg border-telegram/30 hover:bg-telegram hover:border-telegram',
+        iconColor: 'text-telegram',
+      },
+      {
+        label: phoneLabel,
+        sub: 'Позвонить менеджеру',
+        href: phoneHref,
+        icon: Phone,
+        bg: 'bg-bg-secondary border-border hover:bg-accent-light',
+        iconColor: 'text-ink',
+      },
+    ];
+  }, [contacts]);
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
@@ -61,9 +106,9 @@ export default function KontaktyPage() {
               <div className="w-9 h-9 rounded-md bg-bg border border-border flex items-center justify-center flex-shrink-0 mt-0.5"><Clock size={16} className="text-ink-muted" /></div>
               <div>
                 <p className="text-body font-semibold text-ink mb-1">Режим работы</p>
-                <p className="text-body-sm text-ink-muted">Пн–Пт: 9:00–20:00</p>
-                <p className="text-body-sm text-ink-muted">Сб: 10:00–18:00</p>
-                <p className="text-body-sm text-ink-muted">Вс: по договорённости</p>
+                <p className="text-body-sm text-ink-muted">Пн–Пт: {contacts?.hoursWeekday || '9:00-20:00'}</p>
+                <p className="text-body-sm text-ink-muted">Сб: {contacts?.hoursSaturday || '10:00-18:00'}</p>
+                <p className="text-body-sm text-ink-muted">Вс: {contacts?.hoursSunday || 'по договоренности'}</p>
               </div>
             </div>
           </div>
