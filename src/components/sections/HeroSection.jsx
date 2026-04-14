@@ -14,21 +14,20 @@ const utps = [
 ];
 
 export default function HeroSection() {
-  const [heroImages, setHeroImages] = useState({
-    imgAfter: '/uploads/cases/after/after-01.jpg',
-    imgBefore: '/uploads/cases/before/before-01.jpg',
-  });
+  const [heroImages, setHeroImages] = useState(null);
+  const [heroLoaded, setHeroLoaded] = useState(false);
 
   useEffect(() => {
     api.getHero()
       .then((data) => {
         if (!data) return;
-        setHeroImages((prev) => ({
-          imgAfter: data.imgAfter || prev.imgAfter,
-          imgBefore: data.imgBefore || prev.imgBefore,
-        }));
+        setHeroImages({
+          imgAfter: data.imgAfter || '',
+          imgBefore: data.imgBefore || '',
+        });
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setHeroLoaded(true));
   }, []);
 
   return (
@@ -74,8 +73,15 @@ export default function HeroSection() {
 
           <div className="relative hidden lg:block">
             <motion.div {...fadeRight(0.2)} className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-elevated">
-              {heroImages.imgAfter ? (
-                <img src={heroImages.imgAfter} alt="Современный интерьер после ремонта" className="w-full h-full object-cover" />
+              {!heroLoaded && (
+                <div className="absolute inset-0 bg-bg-tertiary animate-pulse" aria-hidden="true" />
+              )}
+              {heroLoaded && heroImages?.imgAfter ? (
+                <img
+                  src={heroImages.imgAfter}
+                  alt="Современный интерьер после ремонта"
+                  className="w-full h-full object-cover animate-fade-in"
+                />
               ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
@@ -95,8 +101,11 @@ export default function HeroSection() {
               className="absolute -left-10 top-12 w-36 rounded-xl overflow-hidden border border-border shadow-card-hover bg-bg"
             >
               <div className="aspect-square overflow-hidden">
-                {heroImages.imgBefore ? (
-                  <img src={heroImages.imgBefore} alt="До ремонта" className="w-full h-full object-cover" />
+                {!heroLoaded && (
+                  <div className="w-full h-full bg-bg-tertiary animate-pulse" aria-hidden="true" />
+                )}
+                {heroLoaded && heroImages?.imgBefore ? (
+                  <img src={heroImages.imgBefore} alt="До ремонта" className="w-full h-full object-cover animate-fade-in" />
                 ) : null}
               </div>
               <div className="px-3 py-2">
