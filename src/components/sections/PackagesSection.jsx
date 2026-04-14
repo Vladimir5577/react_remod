@@ -24,7 +24,15 @@ export default function PackagesSection() {
           <p className="text-body text-ink-muted max-w-[380px] md:text-right">Упрощаем выбор: три понятных пакета с чётким составом работ. Цена фиксируется до старта.</p>
         </AnimateIn>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {packages.map((pkg, i) => (
+          {packages.map((pkg, i) => {
+            const levels = Array.isArray(pkg.levels) ? pkg.levels : [];
+            const includes = Array.isArray(pkg.includes)
+              ? pkg.includes
+              : typeof pkg.includes === 'string'
+                ? [pkg.includes]
+                : [];
+
+            return (
             <AnimateIn key={pkg.id} preset="fade-up" delay={i * 0.1}>
               <div className={`relative flex flex-col rounded-xl border p-7 hover-lift transition-all h-full ${
                 pkg.featured ? 'bg-featured text-white border-featured shadow-elevated' : 'bg-bg-tertiary border-border hover:border-border-strong'
@@ -36,9 +44,9 @@ export default function PackagesSection() {
                 </div>
                 <h3 className={`text-heading font-bold mb-3 ${pkg.featured ? 'text-white' : 'text-ink'}`}>{pkg.name}</h3>
                 <p className={`text-body-sm mb-5 leading-relaxed ${pkg.featured ? 'text-white/60' : 'text-ink-muted'}`}>{pkg.description}</p>
-                {pkg.levels && pkg.levels.length > 0 && (
+                {levels.length > 0 && (
                   <div className="flex gap-2 mb-5 flex-wrap">
-                    {pkg.levels.map((level) => (
+                    {levels.map((level) => (
                       <span key={level} className={`text-caption px-2.5 py-1 rounded-pill border font-medium ${
                         pkg.featured ? 'border-accent/30 text-accent bg-accent/10' : 'border-border text-ink-muted'
                       }`}>{level}</span>
@@ -46,7 +54,7 @@ export default function PackagesSection() {
                   </div>
                 )}
                 <ul className="flex flex-col gap-2 mb-8 flex-1">
-                  {pkg.includes.map((item) => (
+                  {includes.map((item) => (
                     <li key={item} className="flex items-start gap-2.5">
                       <Check size={14} className="flex-shrink-0 mt-0.5 text-accent" />
                       <span className={`text-body-sm ${pkg.featured ? 'text-white/70' : 'text-ink-muted'}`}>{item}</span>
@@ -60,7 +68,8 @@ export default function PackagesSection() {
                 </Link>
               </div>
             </AnimateIn>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
