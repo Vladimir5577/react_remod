@@ -14,20 +14,37 @@ const utps = [
 ];
 
 export default function HeroSection() {
-  const [heroImages, setHeroImages] = useState(null);
-  const [heroLoaded, setHeroLoaded] = useState(false);
+  const [heroImages, setHeroImages] = useState({
+    imgAfter: null,
+    imgBefore: null,
+  });
+  const [isHeroLoaded, setIsHeroLoaded] = useState(false);
+  const [isAfterImgVisible, setIsAfterImgVisible] = useState(false);
+  const [isBeforeImgVisible, setIsBeforeImgVisible] = useState(false);
 
   useEffect(() => {
     api.getHero()
       .then((data) => {
         if (!data) return;
-        setHeroImages({
-          imgAfter: data.imgAfter || '',
-          imgBefore: data.imgBefore || '',
+        const nextAfter = data.imgAfter || null;
+        const nextBefore = data.imgBefore || null;
+
+        setHeroImages((prev) => {
+          if (nextAfter !== prev.imgAfter) {
+            setIsAfterImgVisible(false);
+          }
+          if (nextBefore !== prev.imgBefore) {
+            setIsBeforeImgVisible(false);
+          }
+
+          return {
+            imgAfter: nextAfter,
+            imgBefore: nextBefore,
+          };
         });
       })
       .catch(console.error)
-      .finally(() => setHeroLoaded(true));
+      .finally(() => setIsHeroLoaded(true));
   }, []);
 
   return (
@@ -36,27 +53,23 @@ export default function HeroSection() {
       <div className="relative max-w-container mx-auto container-px w-full section-py">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
-            <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 rounded-pill border border-border bg-bg-secondary text-caption font-medium text-ink-muted">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block animate-pulse" />
-              Принимаем заявки · Москва и МО
-            </motion.div>
-            <motion.h1 {...fadeUp(0.1)} className="text-display-xl font-extrabold text-ink text-balance mb-6 tracking-tight">
+            <motion.h1 {...fadeUp(0)} className="text-display-xl font-extrabold text-ink text-balance mb-6 tracking-tight">
               Ремонт под ключ.<br />
               <span className="text-accent">90 дней — и можно заезжать.</span>
             </motion.h1>
-            <motion.p {...fadeUp(0.18)} className="text-subheading text-ink-muted max-w-[540px] text-pretty mb-10">
+            <motion.p {...fadeUp(0.1)} className="text-subheading text-ink-muted max-w-[540px] text-pretty mb-10">
               Берём на себя всё: замеры, материалы, команду, контроль и клининг. Цена и срок — в договоре до начала работ.
             </motion.p>
-            <motion.div {...fadeUp(0.26)} className="flex flex-col sm:flex-row gap-3 mb-12">
+            <motion.div {...fadeUp(0.18)} className="flex flex-col sm:flex-row gap-3 mb-12">
               <Link to="/ocenka" className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-accent text-black text-body font-black rounded-pill hover:bg-accent-hover transition-colors duration-150 active:scale-[0.98] group">
-                Узнать стоимость за 10 минут
+                Оставить заявку
                 <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link to="/kejsy" className="inline-flex items-center justify-center gap-2 px-7 py-4 border border-border text-ink text-body font-semibold rounded-pill hover:bg-ink/5 hover:border-border-strong transition-colors duration-150 active:scale-[0.98]">
                 Посмотреть кейсы
               </Link>
             </motion.div>
-            <motion.div {...fadeUp(0.34)} className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden border border-border">
+            <motion.div {...fadeUp(0.26)} className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden border border-border">
               {utps.map(({ icon: Icon, label, desc }) => (
                 <div key={label} className="bg-bg-secondary p-5 flex flex-col gap-3">
                   <div className="w-8 h-8 rounded-md bg-bg-tertiary border border-border flex items-center justify-center">
@@ -73,14 +86,13 @@ export default function HeroSection() {
 
           <div className="relative hidden lg:block">
             <motion.div {...fadeRight(0.2)} className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-elevated">
-              {!heroLoaded && (
-                <div className="absolute inset-0 bg-bg-tertiary animate-pulse" aria-hidden="true" />
-              )}
-              {heroLoaded && heroImages?.imgAfter ? (
+              <div className={`w-full h-full bg-bg-secondary transition-opacity duration-500 ${isAfterImgVisible ? 'opacity-0' : 'opacity-100'} ${!isHeroLoaded ? 'animate-pulse' : ''}`} />
+              {heroImages.imgAfter ? (
                 <img
                   src={heroImages.imgAfter}
                   alt="Современный интерьер после ремонта"
-                  className="w-full h-full object-cover animate-fade-in"
+                  onLoad={() => setIsAfterImgVisible(true)}
+                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${isAfterImgVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.02]'}`}
                 />
               ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
@@ -100,12 +112,15 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.55, ease }}
               className="absolute -left-10 top-12 w-36 rounded-xl overflow-hidden border border-border shadow-card-hover bg-bg"
             >
-              <div className="aspect-square overflow-hidden">
-                {!heroLoaded && (
-                  <div className="w-full h-full bg-bg-tertiary animate-pulse" aria-hidden="true" />
-                )}
-                {heroLoaded && heroImages?.imgBefore ? (
-                  <img src={heroImages.imgBefore} alt="До ремонта" className="w-full h-full object-cover animate-fade-in" />
+              <div className="aspect-square overflow-hidden relative">
+                <div className={`w-full h-full bg-bg-secondary transition-opacity duration-500 ${isBeforeImgVisible ? 'opacity-0' : 'opacity-100'} ${!isHeroLoaded ? 'animate-pulse' : ''}`} />
+                {heroImages.imgBefore ? (
+                  <img
+                    src={heroImages.imgBefore}
+                    alt="До ремонта"
+                    onLoad={() => setIsBeforeImgVisible(true)}
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${isBeforeImgVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.03]'}`}
+                  />
                 ) : null}
               </div>
               <div className="px-3 py-2">

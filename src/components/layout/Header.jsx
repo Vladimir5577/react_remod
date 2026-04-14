@@ -67,7 +67,7 @@ export default function Header() {
               to="/ocenka"
               className="inline-flex items-center px-5 py-2.5 bg-accent text-black text-body-sm font-black rounded-pill hover:bg-accent-hover transition-colors duration-150 active:scale-[0.98]"
             >
-              Узнать стоимость
+              Оставить заявку
             </Link>
           </div>
 
@@ -109,7 +109,7 @@ export default function Header() {
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-full px-5 py-3 bg-accent text-black text-body-sm font-black rounded-pill hover:bg-accent-hover transition-colors"
               >
-                Узнать стоимость за 10 минут
+                Оставить заявку
               </Link>
             </div>
           </nav>

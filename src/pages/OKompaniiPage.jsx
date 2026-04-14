@@ -79,9 +79,9 @@ export default function OKompaniiPage() {
 
         <div className="flex flex-col items-center text-center gap-4 p-10 rounded-2xl border border-border bg-accent text-black">
           <h2 className="text-heading font-bold">Готовы обсудить ваш проект?</h2>
-          <p className="text-body text-black/70 max-w-[400px]">Расскажите о квартире — подготовим предварительную оценку за 10 минут.</p>
+          <p className="text-body text-black/70 max-w-[400px]">Расскажите о квартире — менеджер уточнит детали и вышлет детальную смету удобным способом.</p>
           <Link to="/ocenka" className="inline-flex items-center gap-2 px-7 py-3.5 bg-black text-accent text-body-sm font-semibold rounded-pill hover:bg-black/90 transition-colors group">
-            Получить оценку <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            Оставить заявку <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
       </div>

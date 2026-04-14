@@ -6,9 +6,9 @@ export default function OcenkaPage() {
       <div className="max-w-container mx-auto container-px">
         <div className="max-w-[680px] mx-auto">
           <div className="text-center mb-10">
-            <p className="text-label font-semibold text-ink-muted uppercase tracking-widest mb-3">Предварительная оценка</p>
-            <h1 className="text-display-md font-bold text-ink mb-4 text-balance">Узнайте стоимость вашего ремонта</h1>
-            <p className="text-body text-ink-muted max-w-[440px] mx-auto">4 вопроса — и вы увидите ориентировочный бюджет. Менеджер свяжется с детальной сметой.</p>
+            <p className="text-label font-semibold text-ink-muted uppercase tracking-widest mb-3">Заявка на расчёт</p>
+            <h1 className="text-display-md font-bold text-ink mb-4 text-balance">Расскажите о квартире — подготовим смету</h1>
+            <p className="text-body text-ink-muted max-w-[440px] mx-auto">Несколько коротких вопросов о проекте. С вами свяжется менеджер, уточнит все детали и вышлет детальную смету удобным способом.</p>
           </div>
           <div className="bg-bg-secondary border border-border rounded-2xl p-8 md:p-10">
             <Quiz />

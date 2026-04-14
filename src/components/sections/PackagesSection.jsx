@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import AnimateIn from '../ui/AnimateIn.jsx';
 import { api } from '../../lib/api.js';
+import { packageIncludesList, packageLevelsList } from '../../lib/packageLists.js';
 
 export default function PackagesSection() {
   const [packages, setPackages] = useState([]);
@@ -25,12 +26,8 @@ export default function PackagesSection() {
         </AnimateIn>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {packages.map((pkg, i) => {
-            const levels = Array.isArray(pkg.levels) ? pkg.levels : [];
-            const includes = Array.isArray(pkg.includes)
-              ? pkg.includes
-              : typeof pkg.includes === 'string'
-                ? [pkg.includes]
-                : [];
+            const levels = packageLevelsList(pkg);
+            const includes = packageIncludesList(pkg);
 
             return (
             <AnimateIn key={pkg.id} preset="fade-up" delay={i * 0.1}>
@@ -54,8 +51,8 @@ export default function PackagesSection() {
                   </div>
                 )}
                 <ul className="flex flex-col gap-2 mb-8 flex-1">
-                  {includes.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
+                  {includes.map((item, idx) => (
+                    <li key={`${pkg.id}-${idx}`} className="flex items-start gap-2.5">
                       <Check size={14} className="flex-shrink-0 mt-0.5 text-accent" />
                       <span className={`text-body-sm ${pkg.featured ? 'text-white/70' : 'text-ink-muted'}`}>{item}</span>
                     </li>

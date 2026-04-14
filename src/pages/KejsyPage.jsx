@@ -91,9 +91,9 @@ export default function KejsyPage() {
 
         <div className="flex flex-col items-center text-center gap-4 p-10 rounded-2xl bg-bg-secondary border border-border">
           <h2 className="text-heading font-bold text-ink">Хотите так же?</h2>
-          <p className="text-body text-ink-muted max-w-[400px]">Расскажите о своей квартире — оценим сроки и стоимость за 10 минут.</p>
+          <p className="text-body text-ink-muted max-w-[400px]">Расскажите о своей квартире — менеджер уточнит детали и вышлет детальную смету удобным способом.</p>
           <Link to="/ocenka" className="inline-flex items-center gap-2 px-7 py-3.5 bg-accent text-black text-body-sm font-semibold rounded-pill hover:bg-accent-hover transition-colors group">
-            Получить оценку <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            Оставить заявку <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
       </div>

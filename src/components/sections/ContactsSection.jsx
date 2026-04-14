@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Phone, MessageCircle, MapPin, Clock } from 'lucide-react';
 import { api } from '../../lib/api.js';
+import { maxMessengerHref } from '../../lib/maxMessengerHref.js';
+import { MaxMessengerIcon } from '../ui/MaxMessengerIcon.jsx';
 
 export default function ContactsSection() {
   const [contacts, setContacts] = useState(null);
@@ -44,12 +46,12 @@ export default function ContactsSection() {
   }, []);
 
   const messengers = contacts ? [
-    contacts.whatsapp && {
-      label: 'WhatsApp',
+    {
+      label: 'Max',
       sub: 'Ответим в течение 15 минут',
-      href: contacts.whatsapp.startsWith('http') ? contacts.whatsapp : `https://wa.me/${contacts.whatsapp.replace(/\D/g, '')}`,
-      icon: MessageCircle,
-      iconClass: 'text-whatsapp',
+      href: maxMessengerHref(contacts.max),
+      icon: MaxMessengerIcon,
+      iconClass: 'text-max',
     },
     contacts.telegram && {
       label: 'Telegram',
@@ -74,7 +76,7 @@ export default function ContactsSection() {
           <div>
             <p className="text-label font-semibold text-accent uppercase tracking-widest mb-3">Контакты</p>
             <h2 className="text-display-md font-bold text-ink mb-5 text-balance">Свяжитесь удобным способом</h2>
-            <p className="text-body text-ink-muted mb-10 max-w-prose">Ответим на вопросы, оценим сроки и стоимость по описанию. Для точной сметы нужен замер — это бесплатно.</p>
+            <p className="text-body text-ink-muted mb-10 max-w-prose">Ответим на вопросы по срокам и объёму работ. Детальную смету подготовим после бесплатного замера.</p>
             <div className="flex flex-col gap-3">
               {messengers.map((m) => {
                 const Icon = m.icon;

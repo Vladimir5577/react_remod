@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../ui/Button.jsx';
 import { Input } from '../ui/Input.jsx';
-import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Send, MessageCircle } from 'lucide-react';
+import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Send } from 'lucide-react';
+import { MaxMessengerIcon } from '../ui/MaxMessengerIcon.jsx';
 import { api } from '../../lib/api.js';
 
 const INITIAL_STATE = { propertyType: '', area: '', package: '', timeframe: '', name: '', phone: '', channel: 'PHONE_CALL' };
@@ -21,13 +22,24 @@ export function Quiz() {
 
   useEffect(() => {
     try {
-      const saved = sessionStorage.getItem('remod_quiz_state');
-      if (saved) { const p = JSON.parse(saved); if (p.data) setData(p.data); if (p.step !== undefined) setStep(p.step); }
+      sessionStorage.removeItem('remod_quiz_state');
+    } catch {}
+    try {
+      const saved = sessionStorage.getItem('remod_quiz_v2');
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.data) {
+          const d = { ...p.data };
+          if (d.channel === 'WHATSAPP') d.channel = 'MAX';
+          setData(d);
+        }
+        if (p.step !== undefined) setStep(p.step);
+      }
     } catch {}
   }, []);
 
   useEffect(() => {
-    try { sessionStorage.setItem('remod_quiz_state', JSON.stringify({ step, data })); } catch {}
+    try { sessionStorage.setItem('remod_quiz_v2', JSON.stringify({ step, data })); } catch {}
   }, [step, data]);
 
   const handleOptionSelect = (key, value) => {
@@ -35,28 +47,13 @@ export function Quiz() {
     setTimeout(() => setStep((s) => Math.min(s + 1, STEPS.length)), 300);
   };
 
-  const calculateEstimate = () => {
-    let base = 500000;
-    if (data.area === '40–65 м²') base = 1_000_000;
-    if (data.area === '65–90 м²') base = 1_500_000;
-    if (data.area === '90+ м²') base = 2_500_000;
-    let multiplier = 1;
-    if (data.package === 'White box') multiplier = 0.6;
-    if (data.package === 'Комфорт') multiplier = 1.3;
-    if (data.package === 'Серый') multiplier = 1.8;
-    const min = Math.round(base * multiplier);
-    const max = Math.round(min * 1.2);
-    return { min: new Intl.NumberFormat('ru-RU').format(min), max: new Intl.NumberFormat('ru-RU').format(max), rawMin: min, rawMax: max };
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (data.phone.length < 10) return;
     setStatus('loading');
-    const estimate = calculateEstimate();
     try {
-      const res = await api.submitLead({ type: 'QUIZ', ...data, priceMin: estimate.rawMin, priceMax: estimate.rawMax, pageUrl: window.location.href });
-      if (res.ok) { setStatus('success'); sessionStorage.removeItem('remod_quiz_state'); }
+      const res = await api.submitLead({ type: 'QUIZ', ...data, pageUrl: window.location.href });
+      if (res.ok) { setStatus('success'); sessionStorage.removeItem('remod_quiz_v2'); }
       else setStatus('error');
     } catch { setStatus('error'); }
   };
@@ -76,7 +73,6 @@ export function Quiz() {
 
   const currentStepData = STEPS[step];
   const isLastStep = step === STEPS.length;
-  const estimate = isLastStep ? calculateEstimate() : null;
 
   return (
     <div className="mx-auto max-w-2xl w-full">
@@ -116,13 +112,8 @@ export function Quiz() {
             </motion.div>
           ) : (
             <motion.div key="final" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>
-              <div className="mb-7 rounded-xl bg-bg-secondary border border-border p-6">
-                <p className="text-label font-semibold text-ink-muted uppercase tracking-widest mb-2">Предварительная оценка</p>
-                <div className="text-display-md font-extrabold text-ink tracking-tight">{estimate?.min} – {estimate?.max} ₽</div>
-                <p className="mt-2 text-body-sm text-ink-muted">Точная стоимость фиксируется в договоре после бесплатного замера.</p>
-              </div>
               <form onSubmit={handleSubmit} className="space-y-5">
-                <h2 className="text-heading font-bold text-ink">Куда отправить детальную смету?</h2>
+                <h2 className="text-heading font-bold text-ink">Как с вами связаться?</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-1.5 block text-body-sm font-medium text-ink">Имя</label>
@@ -136,7 +127,7 @@ export function Quiz() {
                 <div>
                   <label className="mb-2.5 block text-body-sm font-medium text-ink">Удобный способ связи</label>
                   <div className="grid grid-cols-3 gap-2">
-                    {[{ value: 'PHONE_CALL', label: 'Звонок', Icon: Phone }, { value: 'TELEGRAM', label: 'Telegram', Icon: Send }, { value: 'WHATSAPP', label: 'WhatsApp', Icon: MessageCircle }].map(({ value, label, Icon }) => (
+                    {[{ value: 'PHONE_CALL', label: 'Звонок', Icon: Phone }, { value: 'TELEGRAM', label: 'Telegram', Icon: Send }, { value: 'MAX', label: 'Max', Icon: MaxMessengerIcon }].map(({ value, label, Icon }) => (
                       <button key={value} type="button" onClick={() => setData({ ...data, channel: value })}
                         className={`flex flex-col sm:flex-row items-center justify-center gap-2 rounded-xl border p-3 transition-all text-xs sm:text-body-sm font-medium ${
                           data.channel === value ? 'border-accent bg-accent text-black' : 'border-border text-ink-muted hover:bg-bg-tertiary hover:border-border-strong'
@@ -147,11 +138,11 @@ export function Quiz() {
                   </div>
                 </div>
                 <Button type="submit" size="lg" className="w-full" disabled={status === 'loading' || data.phone.length < 10}>
-                  {status === 'loading' ? 'Отправляем...' : 'Получить оценку'}
+                  {status === 'loading' ? 'Отправляем...' : 'Отправить заявку'}
                   {status !== 'loading' && <ArrowRight className="ml-2 h-4 w-4" />}
                 </Button>
                 {status === 'error' && <p className="text-center text-body-sm text-red-500">Что-то пошло не так. Позвоните нам напрямую.</p>}
-                <p className="text-caption text-ink-faint text-center">Нажимая «Получить оценку», вы соглашаетесь с <a href="/politika" className="underline hover:text-ink-muted transition-colors">политикой обработки персональных данных</a>.</p>
+                <p className="text-caption text-ink-faint text-center">Нажимая «Отправить заявку», вы соглашаетесь с <a href="/politika" className="underline hover:text-ink-muted transition-colors">политикой обработки персональных данных</a>.</p>
               </form>
             </motion.div>
           )}

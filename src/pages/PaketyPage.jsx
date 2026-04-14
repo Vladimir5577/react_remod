@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { api } from '../lib/api.js';
+import { packageIncludesList } from '../lib/packageLists.js';
 
 export default function PaketyPage() {
   const [packages, setPackages] = useState([]);
@@ -32,11 +33,7 @@ export default function PaketyPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packages.map(pkg => {
-              const includes = Array.isArray(pkg.includes)
-                ? pkg.includes
-                : typeof pkg.includes === 'string'
-                  ? [pkg.includes]
-                  : [];
+              const includes = packageIncludesList(pkg);
 
               return (
               <div

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import Logo from '../ui/Logo.jsx';
+import { MaxMessengerIcon } from '../ui/MaxMessengerIcon.jsx';
+import { DEFAULT_MAX_MESSENGER_URL } from '../../lib/maxMessengerHref.js';
 
 const links = {
   услуги: [
@@ -14,7 +16,7 @@ const links = {
     { href: '/kontakty', label: 'Контакты' },
   ],
   клиентам: [
-    { href: '/ocenka', label: 'Получить оценку' },
+    { href: '/ocenka', label: 'Оставить заявку' },
     { href: '/o-kompanii', label: 'Гарантии' },
     { href: '/o-kompanii', label: 'Как мы работаем' },
     { href: '/politika', label: 'Политика конфиденциальности' },
@@ -22,8 +24,8 @@ const links = {
 };
 
 const messengers = [
-  { href: 'https://wa.me/79991234567', label: 'WhatsApp', icon: 'WA' },
-  { href: 'https://t.me/remodpro', label: 'Telegram', icon: 'TG' },
+  { href: DEFAULT_MAX_MESSENGER_URL, label: 'Max', kind: 'max' },
+  { href: 'https://t.me/remodpro', label: 'Telegram', kind: 'tg' },
 ];
 
 export default function Footer() {
@@ -48,7 +50,7 @@ export default function Footer() {
                   aria-label={m.label}
                   className="w-9 h-9 rounded-md bg-bg-tertiary border border-border hover:border-accent hover:text-accent flex items-center justify-center text-caption font-bold transition-colors"
                 >
-                  {m.icon}
+                  {m.kind === 'max' ? <MaxMessengerIcon className="text-current" size={17} /> : 'TG'}
                 </a>
               ))}
             </div>
