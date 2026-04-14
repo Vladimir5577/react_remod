@@ -31,7 +31,14 @@ export default function PaketyPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {packages.map(pkg => (
+            {packages.map(pkg => {
+              const includes = Array.isArray(pkg.includes)
+                ? pkg.includes
+                : typeof pkg.includes === 'string'
+                  ? [pkg.includes]
+                  : [];
+
+              return (
               <div
                 key={pkg.id}
                 className={`relative flex flex-col rounded-2xl border overflow-hidden ${
@@ -61,7 +68,7 @@ export default function PaketyPage() {
                 </div>
 
                 <ul className="flex flex-col gap-3 mb-8 flex-1">
-                  {(pkg.includes || []).map((feature, idx) => (
+                  {includes.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <Check className="w-4 h-4 text-accent mt-0.5 shrink-0" />
                       <span className="text-body text-ink-muted">{feature}</span>
@@ -82,7 +89,8 @@ export default function PaketyPage() {
                 </Link>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>
