@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button.jsx';
 import { Input } from '../ui/Input.jsx';
 import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Send } from 'lucide-react';
@@ -66,7 +67,15 @@ export function Quiz() {
         </div>
         <h2 className="text-heading font-bold text-ink mb-3">Заявка принята!</h2>
         <p className="text-body text-ink-muted max-w-sm">Получили ваши ответы — менеджер свяжется в течение 30 минут в рабочее время.</p>
-        <Button className="mt-10" size="lg" onClick={() => { setStatus('idle'); setStep(0); setData(INITIAL_STATE); }}>Пройти ещё раз</Button>
+        <div className="mt-10 flex flex-col sm:flex-row gap-3">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center font-semibold transition-colors duration-150 cursor-pointer bg-transparent border border-border text-ink hover:bg-ink/5 hover:border-border-strong px-7 py-3.5 text-body rounded-pill"
+          >
+            На главную
+          </Link>
+          <Button size="lg" onClick={() => { setStatus('idle'); setStep(0); setData(INITIAL_STATE); }}>Пройти ещё раз</Button>
+        </div>
       </div>
     );
   }

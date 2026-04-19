@@ -17,7 +17,7 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <Header />
-        <main>
+        <main className="pb-20 md:pb-0">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/kejsy" element={<KejsyPage />} />

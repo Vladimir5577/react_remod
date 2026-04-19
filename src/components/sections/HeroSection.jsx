@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Clock, BadgeCheck, Wallet } from 'lucide-react';
+import { ArrowRight, Clock, BadgeCheck, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { api } from '../../lib/api.js';
 
@@ -10,7 +10,7 @@ const fadeRight = (delay = 0) => ({ initial: { opacity: 0, x: 40 }, animate: { o
 const utps = [
   { icon: Clock, label: '90 дней', desc: 'Фиксированный срок. Сдаём в дату из договора — или согласуем перенос заранее.' },
   { icon: BadgeCheck, label: 'Цена в договоре', desc: 'Итоговая стоимость фиксируется до начала. Никаких «внезапных доплат».' },
-  { icon: Wallet, label: 'Рассрочка', desc: 'Разбиваем платёж на части. Уточняем условия на первой встрече.' },
+  { icon: Gift, label: 'Дизайн проект в подарок', desc: 'Разработка подробного дизайн-проекта и утверждение его перед стартом работ в подарок.' },
 ];
 
 export default function HeroSection() {
