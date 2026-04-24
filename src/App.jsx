@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 import Header from './components/layout/Header.jsx';
 import Footer from './components/layout/Footer.jsx';
@@ -12,9 +13,20 @@ import OKompaniiPage from './pages/OKompaniiPage.jsx';
 import KontaktyPage from './pages/KontaktyPage.jsx';
 import PolitikaPage from './pages/PolitikaPage.jsx';
 
+function YandexMetrikaHit() {
+  const location = useLocation();
+  useEffect(() => {
+    if (window.ym) {
+      window.ym(108724175, 'hit', location.pathname);
+    }
+  }, [location]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <YandexMetrikaHit />
       <ThemeProvider>
         <Header />
         <main className="pb-20 md:pb-0">
